@@ -6,7 +6,7 @@
 /*   By: ftomaz-c <ftomaz-c@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 14:21:09 by ftomaz-c          #+#    #+#             */
-/*   Updated: 2023/07/06 18:00:32 by ftomaz-c         ###   ########.fr       */
+/*   Updated: 2023/07/10 04:33:41 by ftomaz-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,23 @@
 # include <unistd.h>
 # include <stdlib.h>
 
-#define BUFFER_SIZE 5
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 20
+# endif
 
 typedef struct s_list
 {
-	void			*content;
+	char			*content;
 	struct s_list	*next;
 }					t_list;
 
-char 	*get_next_line(int fd);
-int		found_newline(t_list **stash);
+char	*get_next_line(int fd);
+void	read_and_stash(t_list **stash, int fd);
 int		add_to_stash(t_list **stash, char *buffer, int bytes_read);
+void	add_to_last_node(t_list *new_node, t_list **stash);
+int		found_newline(t_list *stash);
+void	extract_line(t_list **stash, char **line);
+void	clean_stash(t_list **stash);
+int		line_len(t_list **stash);
 
 #endif
