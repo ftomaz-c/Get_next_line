@@ -56,7 +56,7 @@ int	found_newline(t_list *stash)
 	{
 		content = current->content;
 		i = 0;
-		while (content[i])
+		while (content[i] != '\0')
 		{
 			if (content[i] == '\n')
 				return (1);
@@ -67,14 +67,14 @@ int	found_newline(t_list *stash)
 	return (0);
 }
 
-int	line_len(t_list **stash)
+int	line_len(t_list *stash)
 {
 	t_list	*current;
 	char	*content;
 	int		i;
 	int		count;
 
-	current = *stash;
+	current = stash;
 	count = 0;
 	while (current != NULL)
 	{
@@ -97,14 +97,23 @@ char	*get_next_line(int fd)
 	static t_list	*stash;
 	char			*line;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, &line, 0) < 0)
 		return (NULL);
-	/* stash = NULL; */
+	if (stash == NULL)
+		stash = NULL;
 	line = NULL;
 	read_and_stash(&stash, fd);
-	extract_line(&stash, &line);
+	if (stash == NULL)
+		return (0);
+	extract_line(stash, &line);
 	clean_stash(&stash);
-	//return line or handle end of file
+	if (line[0] == '\0')
+	{
+		clean_stash(&stash);
+		stash = NULL;
+		free(line);
+		return (NULL);
+	}
 	return (line);
 }
 
@@ -116,21 +125,23 @@ void	read_and_stash(t_list **stash, int fd)
 	while (!found_newline(*stash))
 	{
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
+		if ((*stash == NULL && bytes_read == 0) || bytes_read == -1)
+			return ;
 		buffer[bytes_read] = '\0';
 		add_to_stash(stash, buffer, bytes_read);
 	}
 }
 
-void	extract_line(t_list **stash, char **line)
+void	extract_line(t_list *stash, char **line)
 {
 	t_list	*current;
 	char	*content;
 	int		i;
 	int		j;
 
-	if (*stash == NULL)
+	if (stash == NULL)
 		return ;
-	current = *stash;
+	current = stash;
 	j = 0;
 	*line = malloc(sizeof(char) * (line_len(stash) + 1));
 	while (current != NULL)
@@ -153,20 +164,29 @@ void	extract_line(t_list **stash, char **line)
 void	clean_stash(t_list **stash)
 {
 	t_list	*current;
-	t_list	*next;
 	char	*content;
+	char	*new_content;
+	int		i;
 
+	new_content = malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (*stash == NULL)
 		return ;
 	current = *stash;
 	while (current->next != NULL)
+		current = current->next;
+	content = current->content;
+	while (*content != '\n')
+		content++;
+	content++;
+	i = 0;
+	while (*content != '\0')
 	{
-		next = current->next;
-		content = current->content;
-		free(content);
-		free(current);
-		current = next;
+		new_content[i++] = *content;
+		content++;
 	}
+	*stash = NULL;
+	current->content = new_content;
+	*stash = current;
 }
 
 int	main(void)

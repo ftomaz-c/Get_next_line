@@ -6,7 +6,7 @@
 /*   By: ftomaz-c <ftomaz-c@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 14:20:56 by ftomaz-c          #+#    #+#             */
-/*   Updated: 2023/07/10 03:50:15 by ftomaz-c         ###   ########.fr       */
+/*   Updated: 2023/07/11 10:51:00 by ftomaz-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,14 +76,14 @@ int	found_newline(t_list *stash)
 	return (0);
 }
 
-int	line_len(t_list **stash)
+int	line_len(t_list *stash)
 {
 	t_list	*current;
 	char	*content;
 	int		i;
 	int		count;
 
-	current = *stash;
+	current = stash;
 	count = 0;
 	while (current != NULL)
 	{
