@@ -6,14 +6,14 @@
 /*   By: ftomaz-c <ftomaz-c@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/05 18:52:38 by ftomaz-c          #+#    #+#             */
-/*   Updated: 2023/07/11 10:53:10 by ftomaz-c         ###   ########.fr       */
+/*   Updated: 2023/07/11 22:17:08 by ftomaz-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdio.h>
-#include "get_next_line.h"
+#include "get_next_line/get_next_line.h"
 
 int	main(void)
 {
@@ -29,10 +29,9 @@ int	main(void)
 
 	while ((line = get_next_line(fd)) != NULL)
 	{
-		printf("%s\n", line);
+		printf("%s", line);
 		free(line);
 	}
-
 	close(fd);
 	return (0);
 }
