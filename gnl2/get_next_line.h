@@ -6,7 +6,7 @@
 /*   By: ftomaz-c <ftomaz-c@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 14:21:09 by ftomaz-c          #+#    #+#             */
-/*   Updated: 2023/07/12 19:09:46 by ftomaz-c         ###   ########.fr       */
+/*   Updated: 2023/07/11 22:57:30 by ftomaz-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,19 @@
 #  define BUFFER_SIZE 5
 # endif
 
+typedef struct s_list
+{
+	char			*content;
+	struct s_list	*next;
+}					t_list;
+
 char	*get_next_line(int fd);
-void	read_and_stash(char **stash, int fd);
-int		found_newline(char *stash);
-void	extract_line(char *stash, char	**line);
-size_t	ft_strlen(const char *s);
-char	*ft_strjoin(char const *s1, char const *s2);
-size_t	ft_strlcpy(char *dst, const char *src, size_t size);
-size_t	ft_strlcat(char *dst, const char *src, size_t size);
-void	clean_stash(char **stash);
+void	read_and_stash(t_list **stash, int fd);
+void	add_to_stash(t_list **stash, char *buffer, int bytes_read);
+void	add_to_last_node(t_list *new_node, t_list **stash);
+int		found_newline(t_list *stash);
+void	extract_line(t_list *stash, char **line);
+void	clean_stash(t_list **stash);
+int		line_len(t_list *stash);
 
 #endif
