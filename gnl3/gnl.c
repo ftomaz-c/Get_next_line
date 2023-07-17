@@ -5,9 +5,9 @@
 
 int found_newline(char *stash)
 {
-	while (*stash != '\0')
+	while (stash)
 	{
-		if (*stash == '\n')
+		if (stash == '\n')
 			return 1;
 		stash++;
 	}
@@ -123,7 +123,7 @@ void read_and_stash(char **stash, int fd)
 		}
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
 		buffer[bytes_read] = '\0';
-		*stash = ft_strjoin(*stash, buffer);
+		ft_strjoin(*stash, buffer);
 	}
 	free(buffer);
 }
