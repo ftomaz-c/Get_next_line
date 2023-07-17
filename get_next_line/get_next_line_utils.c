@@ -6,7 +6,7 @@
 /*   By: ftomaz-c <ftomaz-c@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 17:03:31 by ftomaz-c          #+#    #+#             */
-/*   Updated: 2023/07/14 17:36:24 by ftomaz-c         ###   ########.fr       */
+/*   Updated: 2023/07/17 17:38:45 by ftomaz-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,13 @@ char	*ft_strjoin(char *s1, char *s2)
 
 	i = 0;
 	j = 0;
-	if (!s1)
-		s1 = "";
-	if (!s2)
-		s2 = "";
-	temp = (char *)malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+	temp = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
 	if (!temp)
+	{
+		free(temp);
+		free(s1);
 		return (NULL);
+	}
 	while (s1 != NULL && s1[i] != '\0')
 	{
 		temp[i] = s1[i];
@@ -51,6 +51,8 @@ char	*ft_strjoin(char *s1, char *s2)
 	while (s2[j] != '\0')
 		temp[i++] = s2[j++];
 	temp[i] = '\0';
+	if (s1)
+		free(s1);
 	return (temp);
 }
 
