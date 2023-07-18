@@ -6,7 +6,7 @@
 /*   By: ftomaz-c <ftomaz-c@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 13:41:59 by ftomaz-c          #+#    #+#             */
-/*   Updated: 2023/07/17 17:50:16 by ftomaz-c         ###   ########.fr       */
+/*   Updated: 2023/07/17 23:06:56 by ftomaz-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ char	*get_next_line(int fd)
 	static char	*stash;
 
 	line = NULL;
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, NULL, 0) < 0)
+	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	read_and_stash(&stash, fd);
 	if (!stash)
@@ -26,7 +26,9 @@ char	*get_next_line(int fd)
 	extract_line(stash, &line);
 	if (line[0] == '\0')
 	{
-		free (stash);
+		free(stash);
+		stash = NULL;
+		free(line);
 		return (NULL);
 	}
 	clean_stash(&stash);
@@ -40,16 +42,16 @@ void	read_and_stash(char **stash, int fd)
 
 	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!buffer)
-	{
-		free(buffer);
 		return ;
-	}
-	while (!found_newline(*stash))
+	bytes_read = 1;
+	while (bytes_read != 0 && !found_newline(*stash))
 	{
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
-		if (bytes_read == 0)
+		if (bytes_read == -1)
 		{
 			free(buffer);
+			free(*stash);
+			*stash = NULL;
 			return ;
 		}
 		buffer[bytes_read] = '\0';
@@ -115,15 +117,15 @@ void	clean_stash(char **stash)
 	*stash = temp;
 }
 
+/* #include <fcntl.h>
 #include <stdio.h>
-#include <fcntl.h>
 
 int	main(void)
 {
 	int fd;
 	char *line;
 
-	fd = open("read_error.txt", O_RDWR);
+	fd = open("hp1.txt", O_RDWR);
 	while (line = get_next_line(fd))
 	{
 		printf("%s", line);
@@ -131,4 +133,4 @@ int	main(void)
 	}
 	close(fd);
 	return (0);
-}
+} */

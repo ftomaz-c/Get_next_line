@@ -1,84 +1,36 @@
-#include "get_next_line.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ftomaz-c <ftomaz-c@student.42lisboa.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/07/17 23:10:54 by ftomaz-c          #+#    #+#             */
+/*   Updated: 2023/07/17 23:28:03 by ftomaz-c         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-int	found_newline(char *stash)
-{
-	int	i;
-
-	i = 0;
-	if (stash == NULL)
-		return (0);
-	while (stash[i] != '\0')
-	{
-		if (stash[i] == '\n')
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
-char	*ft_strjoin(char *s1, char *s2)
-{
-	char	*temp;
-	size_t	i;
-	size_t	j;
-
-	i = 0;
-	j = 0;
-	temp = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
-	if (!temp)
-	{
-		free(temp);
-		free(s1);
-		return (NULL);
-	}
-	while (s1 != NULL && s1[i] != '\0')
-	{
-		temp[i] = s1[i];
-		i++;
-	}
-	while (s2[j] != '\0')
-		temp[i++] = s2[j++];
-	temp[i] = '\0';
-	if (s1)
-		free(s1);
-	return (temp);
-}
-
-int	ft_strlen(char *str)
-{
-	size_t	count;
-	size_t	i;
-
-	i = 0;
-	count = 0;
-	if (!str)
-		return (0);
-	while (str[i] != '\0')
-	{
-		count++;
-		i++;
-	}
-	return (count);
-}
+#include "get_next_line_bonus.h"
 
 char	*get_next_line(int fd)
 {
+	static char	*stash[1024];
 	char		*line;
-	static char	*stash;
 
-	line = NULL;
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, NULL, 0) < 0)
+	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	read_and_stash(&stash, fd);
-	if (!stash)
+	read_and_stash(&stash[fd], fd);
+	if (!stash[fd])
 		return (NULL);
-	extract_line(stash, &line);
+	extract_line(stash[fd], &line);
 	if (line[0] == '\0')
 	{
-		free (stash);
+		free (stash[fd]);
+		stash[fd] = NULL;
+		free (line);
 		return (NULL);
 	}
-	clean_stash(&stash);
+	clean_stash(&stash[fd]);
 	return (line);
 }
 
@@ -89,16 +41,16 @@ void	read_and_stash(char **stash, int fd)
 
 	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!buffer)
-	{
-		free(buffer);
 		return ;
-	}
-	while (!found_newline(*stash))
+	bytes_read = 1;
+	while (bytes_read != 0 && !found_newline(*stash))
 	{
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
-		if (bytes_read == 0)
+		if (bytes_read == -1)
 		{
 			free(buffer);
+			free(*stash);
+			*stash = NULL;
 			return ;
 		}
 		buffer[bytes_read] = '\0';
@@ -162,22 +114,4 @@ void	clean_stash(char **stash)
 	temp[i] = '\0';
 	free(*stash);
 	*stash = temp;
-}
-
-#include <stdio.h>
-#include <fcntl.h>
-
-int	main(void)
-{
-	int fd;
-	char *line;
-
-	fd = open("read_error.txt", O_RDWR);
-	while (line = get_next_line(fd))
-	{
-		printf("%s", line);
-		free(line);
-	}
-	close(fd);
-	return (0);
 }
