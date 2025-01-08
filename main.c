@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ftomaz-c <ftomaz-c@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: ftomazc < ftomaz-c@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/05 18:52:38 by ftomaz-c          #+#    #+#             */
-/*   Updated: 2023/07/11 22:17:08 by ftomaz-c         ###   ########.fr       */
+/*   Updated: 2025/01/08 12:38:16 by ftomazc          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ int	main(void)
 		printf("\033[31mError opening the file.\033[0m\n");
 		return (1);
 	}
-
 	while ((line = get_next_line(fd)) != NULL)
 	{
 		printf("%s", line);

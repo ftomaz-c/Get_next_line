@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ftomaz-c <ftomaz-c@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: ftomazc < ftomaz-c@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 23:10:54 by ftomaz-c          #+#    #+#             */
-/*   Updated: 2023/07/17 23:28:03 by ftomaz-c         ###   ########.fr       */
+/*   Updated: 2025/01/08 12:49:07 by ftomazc          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,6 @@ void	read_and_stash(char **stash, int fd)
 		if (bytes_read == -1)
 		{
 			free(buffer);
-			free(*stash);
-			*stash = NULL;
 			return ;
 		}
 		buffer[bytes_read] = '\0';

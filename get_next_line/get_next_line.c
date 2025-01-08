@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ftomaz-c <ftomaz-c@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: ftomazc < ftomaz-c@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 13:41:59 by ftomaz-c          #+#    #+#             */
-/*   Updated: 2023/07/18 11:05:08 by ftomaz-c         ###   ########.fr       */
+/*   Updated: 2025/01/08 12:43:42 by ftomazc          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,21 +116,3 @@ void	clean_stash(char **stash)
 	free(*stash);
 	*stash = temp;
 }
-
-/* #include <fcntl.h>
-#include <stdio.h>
-
-int	main(void)
-{
-	int fd;
-	char *line;
-
-	fd = open("hp1.txt", O_RDWR);
-	while (line = get_next_line(fd))
-	{
-		printf("%s", line);
-		free(line);
-	}
-	close(fd);
-	return (0);
-} */
